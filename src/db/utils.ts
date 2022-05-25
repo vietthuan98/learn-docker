@@ -4,7 +4,7 @@ import PoolConnection from 'mysql2/typings/mysql/lib/PoolConnection';
 
 type IMySqlResponse = RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader;
 
-export function query(sql: string, placeholders: any[], connection = pool): Promise<IMySqlResponse> {
+export function query(sql: string, placeholders: any[] = [], connection = pool): Promise<IMySqlResponse> {
 	return new Promise((resolve, reject) => {
 		connection.query(sql, placeholders, (error, results) => {
 			if (error) reject(error);

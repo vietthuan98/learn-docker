@@ -1,7 +1,14 @@
-FROM node:12-alpine
-RUN apk add --no-cache python2 g++ make
+FROM node:14
+
+# Create app directory
 WORKDIR /app
+
+# Bundle app source
 COPY . .
-RUN yarn install --production
-CMD ["node", "src/index.js"]
+
+RUN npm install
+RUN npm run build
+
 EXPOSE 3000
+
+ENTRYPOINT ["npm", "start"]

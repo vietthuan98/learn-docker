@@ -3,6 +3,16 @@ import { ICreateUser } from '@/modules/user/types';
 import { pool, query } from 'db';
 import { ResultSetHeader } from 'mysql2';
 
+export async function getUsersFromMysql() {
+	try {
+		const sql = 'SELECT * FROM users WHERE deletedAt IS NULL';
+		return await query(sql);
+	} catch (error) {
+		logError('getUserById', error);
+		throw error;
+	}
+}
+
 export async function getUserById(id: number) {
 	try {
 		const sql = 'SELECT * FROM users WHERE id = ?';

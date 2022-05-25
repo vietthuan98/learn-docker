@@ -1,0 +1,48 @@
+version: "3.7"
+services:
+  mysql-db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password --log-bin-trust-function-creators=1
+    container_name: mysql-db
+    networks:
+      - express-mysql-network
+    ports:
+      - "33061:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ./data_dir:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    hostname: mysql-db
+
+  db-migration:
+    build:
+      context: .
+      dockerfile: ./database/migrations/Dockerfile
+    image: db-migration
+    container_name: db-migration
+    networks:
+      - express-mysql-network
+    environment:
+      WAIT_HOSTS: mysql-db:3306
+    depends_on:
+      - mysql-db
+
+  app-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: app-api
+    container_name: app-api
+    networks:
+      - express-mysql-network
+    restart: always
+    ports:
+      - 3000:3000
+
+networks:
+  express-mysql-network:
+    name: express-mysql-network
+    driver: bridge

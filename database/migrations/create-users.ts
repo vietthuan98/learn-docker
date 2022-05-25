@@ -33,6 +33,9 @@ module.exports = {
 			updatedBy: {
 				type: DataTypes.INTEGER.UNSIGNED,
 			},
+			deletedAt: {
+				type: DataTypes.INTEGER.UNSIGNED,
+			},
 		});
 		await queryInterface.addIndex('users', ['phone']);
 		await queryInterface.addIndex('users', ['email']);

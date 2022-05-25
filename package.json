@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "build": "tsc && tsc-alias",
+    "start": "node dist/src/index.js",
     "dev": "concurrently -k \"npx tsc -w\" \"tsc-alias -w\" \"nodemon dist/src/index.js\"",
     "migrate": "npm run build && sequelize db:migrate",
     "seed": "npm run build && sequelize db:seed:all",

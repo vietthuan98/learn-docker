@@ -1,15 +1,10 @@
 import { responseSuccess } from '@/helpers/response';
 import { NextFunction, Request, Response } from 'express';
-import { createUserToMysql } from '@/modules/user/service';
+import { createUserToMysql, getUsersFromMysql } from '@/modules/user/service';
 
 export async function getUsers(_req: Request, res: Response, next: NextFunction) {
 	try {
-		const users = [
-			{
-				id: 1,
-				name: 'John',
-			}
-		];
+		const users = await getUsersFromMysql();
 		responseSuccess(res, users);
 	} catch (error) {
 		next(error);
