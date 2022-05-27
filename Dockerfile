@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:14-alpine
 
 # Create app directory
 WORKDIR /app
@@ -6,9 +6,9 @@ WORKDIR /app
 # Bundle app source
 COPY . .
 
-RUN npm install
-RUN npm run build
+RUN npm install && npm run build
 
 EXPOSE 3000
 
-ENTRYPOINT ["npm", "start"]
+CMD npm run start
+

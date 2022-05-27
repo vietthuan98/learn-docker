@@ -6,4 +6,4 @@ COPY . .
 
 RUN npm install
 
-CMD npm run migrate
+CMD npm run seed

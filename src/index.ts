@@ -37,6 +37,23 @@ app.use(morgan('tiny'));
  */
 app.use('/api', apiRouter);
 app.get('/', (_req, res) => {
+	// ${{
+	// 	PORT: process.env.PORT,
+	// 	DB_USER_NAME: process.env.DB_USER_NAME,
+	// 	DB_PASSWORD: process.env.DB_PASSWORD,
+	// 	DB_NAME: process.env.DB_NAME,
+	// 	DB_HOST: process.env.DB_HOST,
+	// 	DB_PORT: process.env.DB_PORT,
+	// 	DB_CONNECTION_LIMIT: process.env.DB_CONNECTION_LIMIT,
+	// }}
+	const { PORT,
+		DB_USER_NAME,
+		DB_PASSWORD,
+		DB_NAME,
+		DB_HOST,
+		DB_PORT,
+		DB_CONNECTION_LIMIT } = process.env;
+	logger.error(`port: ${PORT} -DB_USER_NAME: ${DB_USER_NAME} - DB_PASSWORD: ${DB_PASSWORD} - DB_NAME: ${DB_NAME} - DB_HOST ${DB_HOST} - DB_PORT: ${DB_PORT}`);
 	res.send('Server is running...');
 })
 

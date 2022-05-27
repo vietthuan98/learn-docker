@@ -1,48 +1,61 @@
 version: "3.7"
 services:
-  mysql-db:
+  em-mysql:
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password --log-bin-trust-function-creators=1
-    container_name: mysql-db
+    container_name: em-mysql
     networks:
-      - express-mysql-network
+      - em-network
     ports:
       - "33061:3306"
     expose:
-      - "3306"
+      - 3306
     volumes:
       - ./data_dir:/var/lib/mysql
     environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    hostname: mysql-db
+    cap_add:
+      - SYS_NICE
 
-  db-migration:
+  em-db-migration:
     build:
       context: .
       dockerfile: ./database/migrations/Dockerfile
-    image: db-migration
-    container_name: db-migration
+    image: em-db-migration
+    container_name: em-db-migration
     networks:
-      - express-mysql-network
-    environment:
-      WAIT_HOSTS: mysql-db:3306
+      - em-network
     depends_on:
-      - mysql-db
+      - em-mysql
 
-  app-api:
+  # em-db-seeder:
+  #   build:
+  #     context: .
+  #     dockerfile: ./database/seeders/Dockerfile
+  #   image: em-db-seeder
+  #   container_name: em-db-seeder
+  #   networks:
+  #     - em-network
+  #   depends_on:
+  #     - em-mysql
+  #     - em-db-migration
+
+  em-api:
     build:
       context: .
       dockerfile: Dockerfile
-    image: app-api
-    container_name: app-api
+    image: em-api
+    container_name: em-api
     networks:
-      - express-mysql-network
+      - em-network
     restart: always
     ports:
       - 3000:3000
+    depends_on:
+      - em-mysql
 
 networks:
-  express-mysql-network:
-    name: express-mysql-network
+  em-network:
+    name: em-network
     driver: bridge
